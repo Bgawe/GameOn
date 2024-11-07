@@ -7,7 +7,8 @@ from kivy.uix.scrollview import ScrollView
 from kivy.graphics import Rectangle, RoundedRectangle, Color
 from kivy.core.audio import SoundLoader
 from kivy.uix.button import ButtonBehavior
-
+from kivy.metrics import dp
+from kivy.core.window import Window
 
 class RoundedButton(Button):
     def __init__(self, image_source='', **kwargs):
@@ -46,19 +47,20 @@ class MenuPage(Screen):
         layout.add_widget(background)
 
         # Back button
-        back_button = ImageButton(source='images/back.png', size_hint=(None, None), size=(100, 50), pos_hint={'x': 0, 'top': 0.97})
+        back_button = ImageButton(source='images/back.png', size_hint=(None, None), size=(dp(200), dp(100)), pos_hint={'x': 0.05, 'top': 0.9})
         back_button.bind(on_press=self.go_back)
         layout.add_widget(back_button)
 
         # Music toggle button
-        self.music_button = ImageButton(source='images/mute.png', size_hint=(None, None), size=(100, 50), pos_hint={'right': 1, 'top': 0.97})
+        self.music_button = ImageButton(source='images/mute.png', size_hint=(None, None), size=(dp(200), dp(100)), pos_hint={'right': 0.95, 'top': 0.9})
         self.music_button.bind(on_press=self.toggle_music)
         layout.add_widget(self.music_button)
 
         scroll_view = ScrollView(size_hint=(1, 0.6), do_scroll_x=True, do_scroll_y=False)
         scroll_view.pos_hint = {'center_x': 0.5, 'y': 0.0}
 
-        menu_grid = GridLayout(cols=6, padding=20, spacing=20, size_hint_x=None, height='100dp')
+        # Mengatur menu_grid dengan size_hint agar ukuran fleksibel
+        menu_grid = GridLayout(cols=6, padding=20, spacing=20, size_hint_x=None, height=dp(100), size_hint_y=1)
         menu_grid.bind(minimum_width=menu_grid.setter('width'))
 
         buttons = [
@@ -76,8 +78,9 @@ class MenuPage(Screen):
             ('Level 4', self.start_level_4, 'images/level4_icon.png')
         ]
 
+        # Menggunakan size_hint agar ukuran button relatif
         for text, action, image_source in buttons:
-            button = RoundedButton(image_source=image_source, size_hint=(None, 1), width=250)
+            button = RoundedButton(image_source=image_source, size_hint_x=None, width=dp(2000) / 6, height=dp(100))
             button.bind(on_press=action)
             menu_grid.add_widget(button)
 
@@ -86,6 +89,7 @@ class MenuPage(Screen):
 
         self.add_widget(layout)
 
+        # Pengaturan musik
         self.is_music_muted = False
         self.music = SoundLoader.load('background_music.mp3')
         if self.music:
@@ -101,11 +105,11 @@ class MenuPage(Screen):
         self.is_music_muted = not self.is_music_muted
         if self.is_music_muted:
             self.music.stop()
-            self.music_button.source = 'images/unmute.png'  # Update to unmute image
+            self.music_button.source = 'images/unmute.png'
             print("Music muted")
         else:
             self.music.play()
-            self.music_button.source = 'images/mute.png'  # Update to mute image
+            self.music_button.source = 'images/mute.png'
             print("Music unmuted")
 
     def go_to_lowercase(self, instance):
@@ -145,4 +149,4 @@ class MenuPage(Screen):
         print("Starting Level 3")
 
     def start_level_4(self, instance):
-        print("Starting Level 3")
+        print("Starting Level 4")
