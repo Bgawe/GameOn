@@ -2,7 +2,6 @@ from kivy.uix.floatlayout import FloatLayout
 from kivy.uix.button import ButtonBehavior
 from kivy.uix.image import Image
 from kivy.uix.screenmanager import Screen
-from kivy.uix.image import Image
 from kivy.graphics import Color, Rectangle
 from kivy.clock import Clock
 
@@ -25,12 +24,11 @@ class LandingPage(Screen):
 
         self.layout.bind(size=self._update_rect, pos=self._update_rect)
 
-        # Menggunakan ImageButton
+        # Menggunakan ImageButton dengan ukuran fleksibel
         self.start_button = ImageButton(
-            source='images/button_landing.png',  # Ganti dengan path gambar tombol yang diinginkan
-            size_hint=(None, None),
-            size=(450, 120),
-            pos_hint={'center_x': 0.52, 'center_y': 0.25}
+            source='images/button_landing.png',
+            size_hint=(0.7, 0.4),  # Tentukan size_hint yang diinginkan untuk fleksibilitas
+            pos_hint={'center_x': 0.53, 'center_y': 0.25}
         )
         self.start_button.bind(on_press=self.go_to_menu)
 
